@@ -1,0 +1,22 @@
+automation_id: era5
+kind: codex_heartbeat
+enabled: true
+schedule:
+  frequency: daily
+  timezone: UTC
+  local_time: "12:00 Asia/Seoul"
+execution:
+  workspace: D:\WORK\Projects\Codex\ERA5
+  start: "2026-04-01"
+  end: auto
+  lag_days: 5
+  update_command: powershell.exe -NoProfile -ExecutionPolicy Bypass -File ops\update_era5_dashboard_daily.ps1 -Start 2026-04-01 -End auto -LagDays 5
+  qa_command: py -3 scripts\qa_wave_dashboard.py --strict
+publication:
+  project: ERA5 Korea Climate Monitor
+  dashboard_path: external_site\public\dashboard
+  public_url: https://era5-korea-climate-monitor.solverrrrr.chatgpt.site/dashboard/index.html
+  deploy_when: latest_date_changed_or_dashboard_files_changed
+  commit_scope: external_site_dashboard_only
+secrets:
+  policy: keep_out_of_repository
